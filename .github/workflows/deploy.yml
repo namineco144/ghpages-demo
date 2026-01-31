@@ -6,7 +6,7 @@ on:
       - main
 
 permissions:
-  contents: write
+  contents: read
   pages: write
   id-token: write
 
@@ -18,7 +18,8 @@ jobs:
     - uses: actions/setup-node@v6 # Node.jsのセットアップ
       with:
         node-version: '24'
-    - run: npm install # 依存関係のインストール
+        cache: 'npm'
+    - run: npm ci --prefer-offline --no-audit --no-fund # 依存関係のインストール
     - run: npm run build -- --base-href=/ghpages-demo/ # Angularアプリのビルド
     - uses: actions/upload-pages-artifact@v3 # ビルド成果物のアップロード
       with:
