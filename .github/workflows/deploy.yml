@@ -11,17 +11,25 @@ permissions:
   id-token: write
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v5 # リポジトリをチェックアウト
     - uses: actions/setup-node@v6 # Node.jsのセットアップ
       with:
         node-version: '24'
-    - run: npm install -g @angular/cli # Angular CLIのインストール
     - run: npm install # 依存関係のインストール
-    - run: ng build --base-href=/ghpages-demo/ # Angularアプリのビルド
-    - uses: peaceiris/actions-gh-pages@v4 # GitHub Pagesへのデプロイ
+    - run: npm run build # Angularアプリのビルド
+    - uses: actions/upload-pages-artifact@v3 # ビルド成果物のアップロード
       with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./dist/ghpages-demo # ビルド出力ディレクトリを指定
+        path: ./dist/ghpages-demo
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
