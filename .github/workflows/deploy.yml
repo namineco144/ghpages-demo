@@ -22,7 +22,7 @@ jobs:
     - run: npm run build # Angularアプリのビルド
     - uses: actions/upload-pages-artifact@v3 # ビルド成果物のアップロード
       with:
-        path: ./dist/ghpages-demo
+        path: ./dist/ghpages-demo/browser
   deploy:
     environment:
       name: github-pages
