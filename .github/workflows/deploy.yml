@@ -14,16 +14,21 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v5 # リポジトリをチェックアウト
-    - uses: actions/setup-node@v6 # Node.jsのセットアップ
+    - name: リポジトリのチェックアウト
+      uses: actions/checkout@v5
+    - name: Node.jsのセットアップ
+      uses: actions/setup-node@v6
       with:
         node-version: '24'
         cache: 'npm'
-    - run: npm ci --prefer-offline --no-audit --no-fund # 依存関係のインストール
-    - run: npm run build -- --base-href=/ghpages-demo/ # Angularアプリのビルド
-    - uses: actions/upload-pages-artifact@v3 # ビルド成果物のアップロード
+    - name: 依存関係のインストール
+      run: npm ci --prefer-offline --no-audit --no-fund
+    - name: Angularアプリのビルド
+      run: npm run build -- --base-href=/${{ github.event.repository.name }}/
+    - name: ビルド成果物のアップロード
+      uses: actions/upload-pages-artifact@v4
       with:
-        path: ./dist/ghpages-demo/browser
+        path: ./dist/${{ github.event.repository.name }}/browser
   deploy:
     environment:
       name: github-pages
