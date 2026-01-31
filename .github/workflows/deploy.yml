@@ -15,7 +15,7 @@ jobs:
         node-version: '24'
     - run: npm install -g @angular/cli # Angular CLIのインストール
     - run: npm install # 依存関係のインストール
-    - run: ng build --prod --base-href=/ghpages-demo/ # Angularアプリのビルド
+    - run: ng build --base-href=/ghpages-demo/ # Angularアプリのビルド
     - uses: peaceiris/actions-gh-pages@v4 # GitHub Pagesへのデプロイ
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
