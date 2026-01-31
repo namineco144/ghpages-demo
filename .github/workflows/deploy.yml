@@ -1,0 +1,23 @@
+name: Deploy Angular to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+build-and-deploy:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v5 # リポジトリをチェックアウト
+    - uses: actions/setup-node@v6 # Node.jsのセットアップ
+      with:
+        node-version: '24'
+    - run: npm install -g @angular/cli # Angular CLIのインストール
+    - run: npm install # 依存関係のインストール
+    - run: ng build --prod --base-href=/ghpages-demo/ # Angularアプリのビルド
+    - uses: peaceiris/actions-gh-pages@v4 # GitHub Pagesへのデプロイ
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./dist/ghpages-demo # ビルド出力ディレクトリを指定
